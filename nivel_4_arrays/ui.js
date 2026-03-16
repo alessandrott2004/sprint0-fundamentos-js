@@ -82,16 +82,16 @@ export function conectarEventos() {
     renderLista("Resumen del menú", obtenerResumenMenu());
   });
 
-  document.getElementById("btnVender").addEventListener("click", () => {
-    const nombre   = document.getElementById("inputVenderNombre").value;
-    const cantidad = Number(document.getElementById("inputVenderCantidad").value);
-    const resultado = venderPlato(nombre, cantidad);
-
-    if (resultado.ok) {
-      renderLista("Venta exitosa", [resultado.mensaje]);
-      renderMenu();
-    } else {
-      renderLista("Aviso", [resultado.mensaje]);
-    }
-  });
+document.getElementById("btnVender").addEventListener("click", async () => {
+  const nombre   = document.getElementById("inputVenderNombre").value;
+  const cantidad = Number(document.getElementById("inputVenderCantidad").value);
+  try {
+    mostrarMensaje("Procesando pedido...", "procesando");
+    const mensaje = await venderPlatoAsync(nombre, cantidad);
+    mostrarMensaje(mensaje, "exito");
+    renderMenu();
+  } catch (error) {
+    mostrarMensaje(error.message, "error");
+  }
+});
 }
