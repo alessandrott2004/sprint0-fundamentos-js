@@ -59,3 +59,13 @@ export function simularRespuestaServidor(resultado) {
     }, 2000);
   });
 }
+export async function venderPlatoAsync(nombre, cantidad) {
+  const resultado = venderPlato(nombre, cantidad);
+
+  if (!resultado.ok) {
+    throw new Error(resultado.mensaje);
+  }
+
+  const respuesta = await simularRespuestaServidor(resultado.mensaje);
+  return respuesta;
+}
