@@ -1,7 +1,4 @@
 
-// Responsabilidad: almacenar el menú y modificarlo
-// NO sabe que existe el DOM
-
 export let menu = [
   { nombre: "Arroz con pollo", precio: 12, stock: 5 },
   { nombre: "Lomo saltado",    precio: 18, stock: 9 },
@@ -25,4 +22,16 @@ export function agregarPlatoDemo() {
 
   menu.push(nuevoPlato);
   return true;
+}
+export function actualizarStock(nombre, nuevoStock) {
+  for (let i = 0; i < menu.length; i++) {
+    if (menu[i].nombre.toLowerCase() === nombre.toLowerCase()) {
+      menu[i].stock = nuevoStock;
+      return true;
+    }
+  }
+  return false;
+}
+export function agregarPlato(plato) {
+  menu.push(plato);
 }

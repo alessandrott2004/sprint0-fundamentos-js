@@ -42,3 +42,8 @@ export function verificarEstadoGeneral() {
   if (bajos > 0)    return "Hay platos con stock bajo";
   return "Todo disponible";
 }
+export function calcularEstadoPlato(plato) {
+  if (plato.stock === 0) return "agotado";
+  if (plato.stock <= 3)  return "bajo";
+  return "normal";
+}

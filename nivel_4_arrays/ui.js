@@ -4,7 +4,8 @@ import {
   filtrarStockBajo,
   obtenerResumenMenu,
   venderPlato,
-  verificarEstadoGeneral
+  verificarEstadoGeneral,
+  calcularEstadoPlato
 } from './operaciones.js';
 
 export function renderMenu() {
@@ -15,18 +16,8 @@ export function renderMenu() {
 
   for (let i = 0; i < menu.length; i++) {
     const plato = menu[i];
-    let clase = "normal";
-    let textoExtra = "";
-
-    if (plato.stock === 0) {
-      clase = "agotado";
-      textoExtra = " - AGOTADO";
-    } else if (plato.stock <= 3) {
-      clase = "bajo";
-      textoExtra = " - Stock bajo";
-    }
-
-    html += `<li class="${clase}">${plato.nombre} — S/ ${plato.precio} — Stock: ${plato.stock}${textoExtra}</li>`;
+    const estado = calcularEstadoPlato(plato);
+    html += `<li class="${estado}">${plato.nombre} — S/ ${plato.precio} — Stock: ${plato.stock}</li>`;
   }
 
   html += "</ul>";
@@ -47,7 +38,12 @@ export function renderLista(titulo, listaDeTextos) {
   output.innerHTML = html;
 }
 
-export function inicializarEventos() {
+export function mostrarMensaje(texto) {
+  const output = document.getElementById("output");
+  output.innerHTML = `<p>${texto}</p>`;
+}
+
+export function conectarEventos() {
   document.getElementById("btnMostrar").addEventListener("click", () => {
     renderMenu();
   });
