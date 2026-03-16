@@ -4,6 +4,7 @@ import {
   filtrarStockBajo,
   obtenerResumenMenu,
   venderPlato,
+  venderPlatoAsync,
   verificarEstadoGeneral,
   calcularEstadoPlato
 } from './operaciones.js';
@@ -38,9 +39,10 @@ export function renderLista(titulo, listaDeTextos) {
   output.innerHTML = html;
 }
 
-export function mostrarMensaje(texto) {
+export function mostrarMensaje(texto, tipo = "normal") {
   const output = document.getElementById("output");
-  output.innerHTML = `<p>${texto}</p>`;
+  const colores = { procesando: "blue", error: "red", exito: "green", normal: "black" };
+  output.innerHTML = `<p style="color: ${colores[tipo] || 'black'}"><strong>${texto}</strong></p>`;
 }
 
 export function conectarEventos() {
@@ -89,7 +91,7 @@ document.getElementById("btnVender").addEventListener("click", async () => {
     mostrarMensaje("Procesando pedido...", "procesando");
     const mensaje = await venderPlatoAsync(nombre, cantidad);
     mostrarMensaje(mensaje, "exito");
-    renderMenu();
+    setTimeout(() => renderMenu(), 1500);
   } catch (error) {
     mostrarMensaje(error.message, "error");
   }
