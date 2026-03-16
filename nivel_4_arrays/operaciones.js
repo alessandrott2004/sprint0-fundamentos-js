@@ -47,3 +47,15 @@ export function calcularEstadoPlato(plato) {
   if (plato.stock <= 3)  return "bajo";
   return "normal";
 }
+export function simularRespuestaServidor(resultado) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const falla = Math.random() < 0.3;
+      if (falla) {
+        reject(new Error("Error del servidor simulado."));
+      } else {
+        resolve(resultado);
+      }
+    }, 2000);
+  });
+}
