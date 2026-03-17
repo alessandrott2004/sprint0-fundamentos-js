@@ -1,4 +1,6 @@
 import { menu } from './menu.js';
+
+// Día 8 — Clase de error personalizada
 export class ErrorNegocio extends Error {
   constructor(mensaje) {
     super(mensaje);
@@ -48,11 +50,13 @@ export function verificarEstadoGeneral() {
   if (bajos > 0)    return "Hay platos con stock bajo";
   return "Todo disponible";
 }
+
 export function calcularEstadoPlato(plato) {
   if (plato.stock === 0) return "agotado";
   if (plato.stock <= 3)  return "bajo";
   return "normal";
 }
+
 export function simularRespuestaServidor(resultado) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -65,7 +69,19 @@ export function simularRespuestaServidor(resultado) {
     }, 2000);
   });
 }
+
+// Día 8 — venderPlatoAsync con validaciones y throw
 export async function venderPlatoAsync(nombre, cantidad) {
+  if (!nombre || nombre.trim() === "") {
+    throw new ErrorNegocio("El nombre del plato no puede estar vacío.");
+  }
+  if (isNaN(cantidad) || cantidad === "") {
+    throw new ErrorNegocio("La cantidad debe ser un número.");
+  }
+  if (cantidad <= 0) {
+    throw new ErrorNegocio("La cantidad debe ser mayor a cero.");
+  }
+
   const plato = buscarPlatoPorNombre(nombre);
   if (!plato) {
     throw new ErrorNegocio(`El plato "${nombre}" no existe en el menú.`);
@@ -76,10 +92,11 @@ export async function venderPlatoAsync(nombre, cantidad) {
   if (cantidad > plato.stock) {
     throw new ErrorNegocio(`Stock insuficiente. Stock actual de "${plato.nombre}": ${plato.stock}.`);
   }
+
   plato.stock -= cantidad;
   const mensaje = `Se vendieron ${cantidad} x ${plato.nombre}. Stock restante: ${plato.stock}`;
+
   const respuesta = await simularRespuestaServidor(mensaje);
   return respuesta;
 }
-
 
