@@ -6,7 +6,8 @@ import {
   venderPlato,
   venderPlatoAsync,
   verificarEstadoGeneral,
-  calcularEstadoPlato
+  calcularEstadoPlato,
+  ErrorNegocio
 } from './operaciones.js';
 
 export function renderMenu() {
@@ -84,16 +85,20 @@ export function conectarEventos() {
     renderLista("Resumen del menú", obtenerResumenMenu());
   });
 
-document.getElementById("btnVender").addEventListener("click", async () => {
-  const nombre   = document.getElementById("inputVenderNombre").value;
-  const cantidad = Number(document.getElementById("inputVenderCantidad").value);
-  try {
-    mostrarMensaje("Procesando pedido...", "procesando");
-    const mensaje = await venderPlatoAsync(nombre, cantidad);
-    mostrarMensaje(mensaje, "exito");
-    setTimeout(() => renderMenu(), 1500);
-  } catch (error) {
-    mostrarMensaje(error.message, "error");
-  }
-});
+  document.getElementById("btnVender").addEventListener("click", async () => {
+    const nombre   = document.getElementById("inputVenderNombre").value;
+    const cantidad = Number(document.getElementById("inputVenderCantidad").value);
+    try {
+      mostrarMensaje("Procesando pedido...", "procesando");
+      const mensaje = await venderPlatoAsync(nombre, cantidad);
+      mostrarMensaje(mensaje, "exito");
+      setTimeout(() => renderMenu(), 1500);
+    } catch (error) {
+      if (error.name === "ErrorNegocio") {
+        mostrarMensaje("Advertencia: " + error.message, "error");
+      } else {
+        mostrarMensaje("Error del sistema: " + error.message, "error");
+      }
+    }
+  });
 }
