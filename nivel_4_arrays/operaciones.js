@@ -1,4 +1,10 @@
 import { menu } from './menu.js';
+export class ErrorNegocio extends Error {
+  constructor(mensaje) {
+    super(mensaje);
+    this.name = "ErrorNegocio";
+  }
+}
 
 export function buscarPlatoPorNombre(nombre) {
   return menu.find(p =>
